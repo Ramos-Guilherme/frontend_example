@@ -22,7 +22,18 @@
 	<body>
 		<div class="container-fluid">
             <div class="row">
-                <div class="col-12">
+				<div class="col-6">
+					<nav class="mb-3 mt-3" aria-label="Page navigation example">
+						<ul class="pagination">
+						  <li class="page-item"><a class="page-link" onclick='listaPersonagem(1)'>Primeira</a></li>
+						  <li class="page-item"><a id="anterior" class="page-link" onclick='listaPersonagem(currentPage-1)'>1</a></li>
+						  <li class="page-item"><a id="atual" class="page-link" onclick='listaPersonagem(currentPage)'>2</a></li>
+						  <li class="page-item"><a id="seguinte" class="page-link" onclick='listaPersonagem(currentPage+1)'>3</a></li>
+						  <li class="page-item"><a class="page-link" onclick='listaPersonagem(lastPage)'>Última</a></li>
+						</ul>
+					  </nav>
+				</div>
+                <div class="col-6">
                     <div class="input-group mb-3 mt-3">
                         <input type="text" id="inputId" class="form-control" placeholder="ID" aria-label="ID" aria-describedby="button-addon2">
                         <button class="btn btn-outline-secondary" onClick='buscarId()' type="button" id="button-addon2">Buscar</button>
@@ -36,9 +47,6 @@
 							<tr>
 								<th scope="col">#</th>
 								<th scope="col">Nome</th>
-								<th scope="col">Idade</th>
-								<th scope="col">CPF</th>
-                                <th scope="col">Email</th>
 							</tr>
 						</thead>
 						<tbody>

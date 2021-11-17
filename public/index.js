@@ -1,50 +1,42 @@
-const url = "https://growdev-first-app.herokuapp.com/user";
+const url = "https://growdev-first-app.herokuapp.com/personagem";
+let currentPage = 1;
+let lastPage;
 
-function buscarUsuarios() {
-	axios.get(url).then((response) => {
-        document.querySelector("tbody").innerHTML = '';
+function listaPersonagem(pagina) {
+	if (pagina > 0) currentPage = pagina;
+	if (pagina == 1) {
+		document.querySelector("#anterior").style.display = "none";
+	} else {
+		document.querySelector("#anterior").style.display = "block";
+		document.querySelector("#anterior").textContent = currentPage - 1;
+	}
+	document.querySelector("#atual").textContent = currentPage;
+	document.querySelector("#seguinte").textContent = currentPage + 1;
 
-		response.data.forEach((user) => {
-			document.querySelector("tbody").innerHTML += `
+	axios
+		.get(url, {
+			params: {
+				page: currentPage,
+				limit: 15,
+			},
+		})
+		.then( response => { return response.data })
+		.then( data => {
+			document.querySelector("tbody").innerHTML = "";
+
+			lastPage = data.totalPages;
+
+			data.personagens.forEach((personagem) => {
+				document.querySelector("tbody").innerHTML += `
                 <tr>
-                <th scope="row">${user.id}</th>
-                <td>${user.name}</td>
-                <td>${user.age}</td>
-                <td>${user.cpf}</td>
-                <td>${user.email}</td>
+                <th scope="row">${personagem.id}</th>
+                <td>${personagem.nome}</td>
                 </tr>
                 `;
+			});
 		});
-	});
 }
 
-function buscarId() {
-	const inputId = document.querySelector("#inputId");
-	if (inputId.value) {
-		axios.get(url + `/${inputId.value}`).then((response) => {
-			let user = response.data;
-			document.querySelector("tbody").innerHTML = `
-        <tr>
-        <th scope="row">${user.id}</th>
-        <td>${user.name}</td>
-        <td>${user.age}</td>
-        <td>${user.cpf}</td>
-        <td>${user.email}</td>
-        </tr>
-        `;
-		}).catch( (error) => {
-            if(error.response){
-                alert(error.response.data);
-            } else {
-                console.log(error);
-            }
-        });
-	} else {
-        buscarUsuarios();
-	}
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    buscarUsuarios();
-})
-
+document.addEventListener("DOMContentLoaded", () => {
+	listaPersonagem(currentPage);
+});
